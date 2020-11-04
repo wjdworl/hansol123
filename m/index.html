@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>한솔제지</title>
+  <!-- bx slider -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+  
+  <link rel="stylesheet" href="./css/reset.css">
+  <style>
+    *{box-sizing:border-box;}
+    .sub_nav{display:none;}
+    .content{padding:0 20px;}
+    .header>.content{
+      height:100px;
+      border-bottom:1px solid black;
+      position:relative;
+    }
+
+    .main_logo{padding-top:30px;}
+    .main_logo p:first-child{
+      padding-left:8px;
+      font-weight:bold;
+      font-size:24px;
+      color:#333333;
+      position:relative;
+    }
+    .main_logo p:first-child::before,
+    .main_logo p:first-child::after{
+      content:'';
+      display:block;
+      width:6px;
+      height:6px;
+      position:absolute;
+      left:0;
+    }
+    .main_logo p:first-child::before{
+      background-color:blue;
+      top:4px;
+    }
+    .main_logo p:first-child::after{
+      background-color:green;
+      bottom:2px;
+    }
+    .main_logo p:last-child{
+      font-size:14px;
+      color:#333333;
+      padding-left:30px;
+    }
+
+    .slider_menu{
+      width:0;      
+      background-color:white;
+      overflow: hidden;
+      position:absolute;
+      right:0;
+      top:100px;
+      z-index:20;
+      transition:0.3s;
+    }
+    .slider_menu.active{
+      padding:20px;
+      width:100%;
+    }
+    .lang{display:flex;margin-bottom:30px;}
+    .lang>li{width:80px;font-size:20px;cursor: pointer;}
+    .lang>li:first-child{font-weight:bold;}
+
+    .main_nav{}
+    .main_nav>li{
+      padding:20px 0;
+      position:relative;
+    }
+    .main_nav>li>a::before{
+      content:'';
+      display:block;
+      width:24px;
+      height:4px;
+      background-color:black;
+      position:absolute;
+      right:0;
+      top:50%;
+      transform:translateY(-50%);
+    }
+    .main_nav>li>a::after{
+      content:'';
+      display:block;
+      width:4px;
+      height:24px;
+      background-color:black;
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+    }
+    .main_nav>li>a.active::before{
+      background-color:blue;
+      transform:rotate(180deg);
+      transition:0.3s;
+    }
+    .main_nav>li>a.active::after{
+      background-color:blue;
+      transform:rotate(90deg);
+      transition:0.3s;
+    }
+
+    .main_nav>li>a{
+      display:block;
+      font-weight:bold;
+      font-size:36px;
+      color:black;
+      transition:0.3s;
+    }
+    .main_nav>li>a.active{
+      color:blue;
+    }
+    .sub_nav{
+      padding-top:20px;
+    }
+    .sub_nav>li{
+      padding:10px 0;
+    }
+    .sub_nav>li>a{
+      display:block;
+      font-size:24px;
+      color:#333333;
+    }
+    .sub_nav>li>a:hover{
+      color:blue;
+    }
+
+    .btn_nav{
+      width:30px;
+      height:30px;
+      position:absolute;
+      right:20px;
+      top:50%;
+      transform:translateY(-50%);
+      display:flex;
+      flex-flow:column nowrap;
+      justify-content:space-between;
+    }
+    .btn_nav>li{
+      width:100%;
+      height:4px;
+      background-color:black;
+      transform-origin:left center;
+      transition:0.3s;
+    }
+    .btn_nav>li:nth-child(2){
+      transform-origin:center;
+    }
+    .btn_nav.active>li:nth-child(1){
+      transform:rotate(48deg) scaleX(1.1);
+    }
+    .btn_nav.active>li:nth-child(2){
+      transform:scaleX(0);
+    }
+    .btn_nav.active>li:nth-child(3){
+      transform:rotate(-48deg) scaleX(1.1);
+    }
+
+    /* bxSlider */
+    .bx-pager.bx-default-pager{display:none;}
+    .bx-controls-direction{display:none;}
+    .bx-wrapper{border:none;}
+    .slider>div{position:relative;}
+    .slider>div>.banner_txt{
+      position:absolute;
+      left:50%;
+      top:50px;
+      transform:translateX(-50%);
+    }
+    .slider>div>.banner_txt>h2{
+      font-weight:bolder;
+      font-size:60px;
+      text-align:center
+    }
+    .slider>div>.banner_txt>h2>span{
+      display:inline-block;
+      margin:0 16px;
+      border:10px solid red;
+      padding:16px;
+    }
+    .slider>div>.banner_txt>p{
+      font-size:22px;
+      line-height:30px;
+      color:#666666;
+      text-align:center
+    }
+    .slider>div>.banner_txt>span{
+      display:block;
+      text-indent:-999999px;
+      width:50px;
+      height:50px;
+      border:2px solid black;
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+    }
+    .slider>div>.banner_txt>span::before{
+      content:'';
+      display:block;
+      width:30px;
+      height:2px;
+      background-color:black;
+      transform-origin:right center;
+      transform:rotate(45deg) translate(-50%,-50%);
+      position:absolute;
+      left:50%;
+      top:50%;
+    }
+    .slider>div>.banner_txt>span::after{
+      content:'';
+      display:block;
+      width:30px;
+      height:2px;
+      background-color:black;
+      transform-origin:right center;
+      transform:rotate(-45deg) translate(-50%,-50%);
+      position:absolute;
+      left:50%;
+      top:50%;      
+    }
+  </style>
+    
+  <script>
+    $(document).ready(function(){
+      
+      $('.slider').bxSlider();
+
+      $('#nav_btn').click(function(){
+        $('header>.content').toggleClass('active');
+        $('.slider_menu').toggleClass('active');
+        $('#nav_btn').toggleClass('active');
+      });
+
+      $('.main_nav>li>a').click(function(){
+        $('.sub_nav').slideToggle();
+        $('.main_nav>li>a').toggleClass('active');
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <div class="content">
+        <h1 class="main_logo">
+          <a href="index.html">                  
+            <p>Hansol</p>
+            <p>한솔제지</p>
+          </a>
+        </h1>
+        <div class="slider_menu">
+          <ul class="lang">
+            <li>KOR</li>
+            <li>ENG</li>
+          </ul>
+          <ul class="main_nav">
+            <li>
+              <a href="#">제품소개</a>
+              <ul class="sub_nav">
+                <li><a href="#">인스퍼</a></li>
+                <li><a href="#">인쇄용지</a></li>
+                <li><a href="#">산업용지</a></li>
+                <li><a href="#">특수지</a></li>
+                <li><a href="#">감열지</a></li>
+                <li><a href="#">신소재</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">회사소개</a>
+              <ul class="sub_nav">
+                <li><a href="#">한솔제지</a></li>
+                <li><a href="#">이념과 비전</a></li>
+                <li><a href="#">연혁</a></li>
+                <li><a href="#">CEO인사</a></li>
+                <li><a href="#">문화산업</a></li>
+                <li><a href="#">사업장 소개</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#" id="key03">지속가능경영</a>
+              <ul class="sub_nav">
+                <li><a href="#">환경경영</a></li>
+                <li><a href="#">윤리경영</a></li>
+                <li><a href="#">사회공헌</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">투자정보</a>
+              <ul class="sub_nav">
+                <li><a href="#">주식정보</a></li>
+                <li><a href="#">재무정보</a></li>
+                <li><a href="#">공시정보</a></li>
+                <li><a href="#">기업지배구조</a></li>
+                <li><a href="#">전자공고</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">인재채용</a>
+              <ul class="sub_nav">
+                <li><a href="#">인재상</a></li>
+                <li><a href="#">인사제도</a></li>
+                <li><a href="#">채용정보</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#">로그인</a>
+            </li>
+          </ul>
+          <ul class="sns">
+            <li><a href="#">고객문의</a></li>
+            <li><a href="#" class="circle"><span>인스타그램</span></a></li>
+            <li><a href="#" class="circle"><span>페이스북</span></a></li>
+          </ul>
+        </div>
+        <ul class="btn_nav" id="nav_btn">
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+      </div>
+    </header>
+    <section class="section">
+      <article class="article main_banner">
+        <div class="row">
+          <div class="slider">
+            <div>
+              <img src="./images/main_banner01.jpg" alt="메인베너1">
+              <div class="banner_txt">
+                <h2><span>M</span>ROUGH</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum inventore omnis odit doloremque tenetur dolorum quidem nam pariatur! Repudiandae nam voluptas quod. Veritatis minima atque voluptatum laudantium, eaque quasi beatae.</p>
+                <span>자세히보기</span>
+              </div>
+            </div>
+            <div>
+              <img src="./images/main_banner02.jpg" alt="메인베너2">
+              <div class="banner_txt">
+                <h2>앙상블<span>E</span>클레스</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum inventore omnis odit doloremque tenetur dolorum quidem nam pariatur! Repudiandae nam voluptas quod. Veritatis minima atque voluptatum laudantium, eaque quasi beatae.</p>
+                <span>자세히보기</span>
+              </div>
+            </div>
+            <div>
+              <img src="./images/main_banner03.jpg" alt="메인베너3">
+              <div class="banner_txt">
+                <h2><span>HI-Q AB</span>플러스</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum inventore omnis odit doloremque tenetur dolorum quidem nam pariatur! Repudiandae nam voluptas quod. Veritatis minima atque voluptatum laudantium, eaque quasi beatae.</p>
+                <span>자세히보기</span>
+              </div>
+            </div>
+            <div>
+              <img src="./images/main_banner04.jpg" alt="메인베너4">
+              <div class="banner_txt content">
+                <h2>PROTEGO</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum inventore omnis odit doloremque tenetur dolorum quidem nam pariatur! Repudiandae nam voluptas quod. Veritatis minima atque voluptatum laudantium, eaque quasi beatae.</p>
+                <span>자세히보기</span>
+              </div>
+            </div>
+            <div>
+              <img src="./images/main_banner05.jpg" alt="메인베너5">
+              <div class="banner_txt">
+                <h2>한솔감열지<span>GREEN</span></h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum inventore omnis odit doloremque tenetur dolorum quidem nam pariatur! Repudiandae nam voluptas quod. Veritatis minima atque voluptatum laudantium, eaque quasi beatae.</p>
+                <span>자세히보기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="article sub_banner">
+        <div class="row">
+          <div class="slider">
+            <div>
+              <div class="sub_banner_txt content">
+                <h2>한솔은<br>사람이다</h2>
+                <div class="line">
+                  <div></div>
+                </div>
+                <div class="sub_banner_content">
+                  <h4>
+                    한솔인은 어려움에 부닥치거나 도전을 받으면<br>
+                    철갑을 두른 득하다는 그 소나무처럼 강철 같은 힘을 발휘한다.<br>
+                    칩엽수의 날카로운 잎처럼 예리하고 섬세한 적응력으로 응전을 한다.
+                  </h4>
+                  <p>초대 문화부 장관 이어령, 한솔 40년 사사 축사 중</p>
+                  <span class="button">한솔제지 소개</span>
+                </div>
+              </div>
+              <div class="sub_banner_img">
+                <img src="./images/sub_banner01.jpg" alt="서브1">
+              </div>
+            </div>
+            <div>
+              <div class="sub_banner_txt content">
+                <h2>한솔은<br>기술이다</h2>
+                <div class="line">
+                  <div></div>
+                </div>
+                <div class="sub_banner_content">
+                  <h4>
+                    플라스틱이나 금속의 광물질과는 달리<br>
+                    종이는 우리에게 늘 따숩고 정겨운 촉감을 준다<br>
+                    문방사우의 하나인 이 종이야말로 시와 서화를 담는 꿈의 그릇이 아니겠는가.
+                  </h4>
+                  <p>초대 문화부 장관 이어령, 한솔 40년 사사 축사 중</p>
+                  <span class="button">한솔제지 소개</span>
+                </div>
+              </div>
+              <div class="sub_banner_img">
+                <img src="./images/sub_banner02.jpg" alt="서브2">
+              </div>
+            </div>
+            <div>
+              <div class="sub_banner_txt content">
+                <h2>한솔은<br>미래다</h2>
+                <div class="line">
+                  <div></div>
+                </div>
+                <div class="sub_banner_content">
+                  <h4>
+                    한솔은 영원한 청년으로<br>
+                    40년의 나이테를 안에 몰래 숨기며<br>
+                    천년을 만년을 향하여 젊게 살아가는 바위 같은 나무다.
+                  </h4>
+                  <p>초대 문화부 장관 이어령, 한솔 40년 사사 축사 중</p>
+                  <span class="button">한솔제지 소개</span>
+                </div>
+              </div>
+              <div class="sub_banner_img">
+                <img src="./images/sub_banner03.jpg" alt="서브3">
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </article>
+      <article class="article togethor">
+        <div class="row">
+          <div class="content">
+            <div class="go_togethor">
+              <h3>Go togethor</h3>
+            </div>
+            
+            <ul class="go_togethor_txt">
+              <li>
+                <h2>한솔제지는<br>고객과 함께 성장합니다.</h2>
+              </li>
+              <li class="line">라인</li>
+              <li>
+                <h3>페이퍼넷</h3>
+                <p>
+                  한솔제지는 환경 변화와 고객 니즈를 반영한 제품 포트폴리오 강화를 통해<br>
+                  선진 제지기업으로서의 최고의 제품을 위해 노력하고 있습니다.
+                </p>
+                <div class="circle"></div>
+              </li>
+              <li class="line">라인</li>
+              <li>
+                <h3>열린구매 시스템</h3>
+                <p>
+                  구매관리, 운송정보, 납품실적관리를 쉽고 편리하게<br>
+                  확인 하실 수 있습니다.
+                </p>
+                <div class="circle"></div>
+              </li>
+            </ul>
+            
+          </div>
+        </div>
+      </article>
+    </section>
+    <footer class="footer">
+      <div class="row">
+        <div class="content">
+          <h5 class="footer_logo">
+            <p>Hansol</p>
+            <p>한솔제지</p>
+          </h5>
+          <address>
+            <p>서울 중구 을지로 100 (을지로2가) 파인애비뉴 B동 23~24층</p>
+            <p>Copyright 2020 Hansol., All rights Reserved.</p>
+          </address>
+          <ul>
+            <li>
+              <a href="#">개인정보처리방침</a>
+            </li>
+            <li>
+              <select>
+                <option disabled="disabled">Family Site</option>
+                <option>한솔그룹</option>
+                <option>한솔 PNS</option>
+                <option>한솔홈데코</option>
+                <option>한솔테크닉스</option>
+                <option>한솔케미칼</option>
+                <option>한솔EME</option>
+                <option>한솔로지스틱스</option>
+                <option>한솔인티큐브</option>
+                <option>한솔 Museum SAN</option>
+                <option>한솔페이퍼텍</option>
+              </select>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
